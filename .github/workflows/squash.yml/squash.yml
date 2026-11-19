@@ -1,0 +1,23 @@
+name: Squash history
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  squash:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Squash all commits into one
+        run: |
+          git config user.name "datnguyenbadminton-spec"
+          git config user.email "datnguyenbadminton-spec@users.noreply.github.com"
+          rm -rf .github
+          git checkout --orphan squash-tmp
+          git add -A
+          git commit -m "Squash all commits into one"
+          git branch -D main
+          git branch -m main
+          git push --force origin main
